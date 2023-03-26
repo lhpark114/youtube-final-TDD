@@ -1,31 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { fakeVideo as video } from '../../tests/videos';
 import { formatAgo } from '../../util/date';
 import VideoCard from '../VideoCard';
+import { withRouter } from './utils';
+
 
 describe('VideoCard', () => {
-    const video = {
-        id: 1,
-        snippet: {
-            title: 'title',
-            channelId: '1',
-            channelTitle: 'channelTitle',
-            publishedAt: new Date(),
-            thumbnails: {
-                medium: {
-                    url: 'http://image/',
-                },
-            },
-        },
-    };
-
     const {title, channelTitle, publishedAt, thumbnails} = video.snippet;
     it('renders video item', () => {
         render(
-        <MemoryRouter>
-            <VideoCard video={video}/>
-        </MemoryRouter>);
+            withRouter(<Route path='/' element={<VideoCard video={video}/>}/>)
+        );
 
         const image = screen.getByRole('img');
         expect(image.src).toBe(thumbnails.medium.url);
@@ -40,15 +27,14 @@ describe('VideoCard', () => {
             return <pre>{JSON.stringify(useLocation().state)}</pre>
         }
         render(
-        <MemoryRouter initialEntries={['/']}>
-            <Routes>
-                <Route path='/' element={<VideoCard video={video} />}/>
+        withRouter(<>
+            <Route path='/' element={<VideoCard video={video} />}/>
                 <Route 
                 path={`/videos/watch/${video.id}`} 
                 element={<LocationStateDisplay/>}
                 />
-            </Routes>
-        </MemoryRouter>);
+        </>)
+        );
 
         const card = screen.getByRole('listitem');
         userEvent.click(card);
