@@ -5,7 +5,7 @@ import { Route, useLocation } from 'react-router-dom';
 import { fakeVideo as video } from '../../tests/videos';
 import { formatAgo } from '../../util/date';
 import VideoCard from '../VideoCard';
-import { withRouter } from './utils';
+import { withRouter } from '../../tests/utils';
 
 
 describe('VideoCard', () => {
