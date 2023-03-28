@@ -8,35 +8,28 @@ describe('ChannelInfo', () => {
         channelImageURL: jest.fn(),
     }
     afterEach(() => fakeYoutube.channelImageURL.mockReset());
+
     it('renders correctly', async () => {
-        fakeYoutube.channelImageURL.mockImplementation(() => 'url');
-        const { asFragment } = render(
-            withAllContexts(
-                withRouter(
-                <Route path='/' element={<ChannelInfo id='id' name='channel' />} />
-                ),
-                fakeYoutube
-                ));
-                await waitFor(() => screen.getByRole('img'));
-                expect(asFragment()).toMatchSnapshot();
+        const { asFragment } = renderChannelInfoWithCallback(() => 'url');
+
+        await waitFor(() => screen.getByRole('img'));
+        expect(asFragment()).toMatchSnapshot();
     });
 
     it('renders without URL', () => {
-        fakeYoutube.channelImageURL.mockImplementation(() => {
+        renderChannelInfoWithCallback(() => {
             throw new Error('error');
         });
-        render(
-            withAllContexts(
-                withRouter(
-                <Route path='/' element={<ChannelInfo id='id' name='channel' />} />
-                ),
-                fakeYoutube
-                ));
-                expect(screen.queryByRole('img')).toBeNull();
+            expect(screen.queryByRole('img')).toBeNull();
     });
 
     it('renders with URL', async () => {
-        fakeYoutube.channelImageURL.mockImplementation(() => 'url');
+        renderChannelInfoWithCallback(() => 'url');
+            await waitFor(() => expect(screen.getByRole('img')).toBeInTheDocument());
+    });
+
+    function renderChannelInfoWithCallback(callback) {
+        fakeYoutube.channelImageURL.mockImplementation(callback);
         render(
             withAllContexts(
                 withRouter(
@@ -44,7 +37,6 @@ describe('ChannelInfo', () => {
                 ),
                 fakeYoutube
                 ));
-                await waitFor(() => expect(screen.queryByRole('img')).toBeInTheDocument());
-    });
+    }
 });
 
