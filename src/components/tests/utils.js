@@ -1,4 +1,4 @@
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter, Routes } from 'react-router';
 
 export function withRouter(routes, initialEntry = '/') {
     return <MemoryRouter initialEntries={[initialEntry]}>

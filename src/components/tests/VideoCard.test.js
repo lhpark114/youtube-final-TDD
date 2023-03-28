@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import renderer from 'react-test-renderer';
+import { Route, useLocation } from 'react-router-dom';
 import { fakeVideo as video } from '../../tests/videos';
 import { formatAgo } from '../../util/date';
 import VideoCard from '../VideoCard';
@@ -9,6 +10,22 @@ import { withRouter } from './utils';
 
 describe('VideoCard', () => {
     const {title, channelTitle, publishedAt, thumbnails} = video.snippet;
+    it('renders grid type correctly', ()=>{
+        const component = renderer.create(
+            withRouter(<Route path='/' element={<VideoCard video={video} />} />)
+          );
+      
+          expect(component.toJSON()).toMatchSnapshot();
+        });
+    it('renders list type correctly', ()=>{
+        const component = renderer.create(
+            withRouter(
+              <Route path='/' element={<VideoCard video={video} type='list' />} />
+            )
+          );
+      
+          expect(component.toJSON()).toMatchSnapshot();
+        });
     it('renders video item', () => {
         render(
             withRouter(<Route path='/' element={<VideoCard video={video}/>}/>)
