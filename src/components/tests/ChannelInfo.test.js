@@ -1,4 +1,4 @@
-import { screen, render, waitFor } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { Route } from 'react-router-dom';
 import { withAllContexts, withRouter } from '../../tests/utils';
 import ChannelInfo from '../ChannelInfo';
@@ -12,7 +12,7 @@ describe('ChannelInfo', () => {
     it('renders correctly', async () => {
         const { asFragment } = renderChannelInfoWithCallback(() => 'url');
 
-        await waitFor(() => screen.getByRole('img'));
+        await screen.findByRole('img');
         expect(asFragment()).toMatchSnapshot();
     });
 
@@ -25,7 +25,7 @@ describe('ChannelInfo', () => {
 
     it('renders with URL', async () => {
         renderChannelInfoWithCallback(() => 'url');
-            await waitFor(() => expect(screen.getByRole('img')).toBeInTheDocument());
+            await screen.findByRole('img');
     });
 
     function renderChannelInfoWithCallback(callback) {
