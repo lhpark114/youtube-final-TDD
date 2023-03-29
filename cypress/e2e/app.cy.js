@@ -18,6 +18,19 @@ describe('Youtube App', () => {
     });
 
     it('shows popular video first', () => {
-        cy.findByTestId('Popular video').should('exist');
+        cy.findByText('Popular video').should('exist');
+    });
+
+    it('searches by keyword', () => {
+        cy.findAllByPlaceholderText('Search...').type('bts');
+        cy.findByRole('button').click();
+        cy.findByText('Search Result1').should('exist');
+    });
+
+    it('goes to detail page', () => {
+        cy.findAllByRole('listitem').first().click();
+        cy.findByTitle('Popular Video').should('exist');
+        cy.findByText('Popular Video').should('exist');
+        cy.findByText('Search Result1').should('exist');
     });
 });
